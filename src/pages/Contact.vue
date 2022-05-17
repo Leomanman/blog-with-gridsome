@@ -41,6 +41,7 @@
                     type="text"
                     placeholder="Enter your name..."
                     data-sb-validations="required"
+                    v-model="name"
                   />
                   <label for="name">Name</label>
                   <div
@@ -57,6 +58,7 @@
                     type="email"
                     placeholder="Enter your email..."
                     data-sb-validations="required,email"
+                    v-model="email"
                   />
                   <label for="email">Email address</label>
                   <div
@@ -76,6 +78,7 @@
                     type="tel"
                     placeholder="Enter your phone number..."
                     data-sb-validations="required"
+                    v-model="phone"
                   />
                   <label for="phone">Phone Number</label>
                   <div
@@ -92,6 +95,7 @@
                     placeholder="Enter your message here..."
                     style="height: 12rem"
                     data-sb-validations="required"
+                    v-model="message"
                   ></textarea>
                   <label for="message">Message</label>
                   <div
@@ -127,9 +131,10 @@
                 </div>
                 <!-- Submit Button-->
                 <button
-                  class="btn btn-primary text-uppercase disabled"
+                  class="btn btn-primary text-uppercase"
                   id="submitButton"
                   type="submit"
+                  @click.prevent="onsubmit"
                 >
                   Send
                 </button>
@@ -142,7 +147,37 @@
   </Layout>
 </template>
 <script>
+import axios from 'axios'
 export default {
   name: "ContactPage",
+  data() {
+    return {
+      name: "",
+      email: "",
+      phone: "",
+      message: "",
+    };
+  },
+  methods: {
+    onsubmit() {
+      let data = {
+        name: this.name,
+        email: this.email,
+        phone: this.phone,
+        message: this.message,
+      };
+      console.log(data);
+      axios({
+        method: 'POST',
+        url:`${this.GRIDSOME_API_URL}/contacts`,
+        data
+      }).then(res => {
+        if(res.status === 200) {
+          alert('保存成功')
+        }
+        console.log(res)
+      })
+    },
+  },
 };
 </script>
